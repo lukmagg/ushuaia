@@ -1,11 +1,24 @@
 <script setup>
 import { ref } from 'vue'
+import { useCounterStore } from '../stores/CounterStore'
+import { storeToRefs } from 'pinia'
 
 defineProps({
   msg: String,
 })
 
 const count = ref(0)
+
+const CounterStore = useCounterStore()
+
+/* 
+  El método storeToRefs se usa para convertir propiedades reactivas del store en referencias reactivas (ref), 
+  pero no funciona para las funciones, que ya son reactivas de por sí. 
+*/
+const { myDog } = storeToRefs(CounterStore)  // getters must be destructured with storeToRefs
+
+const { changeName, increment } = CounterStore  // actions musn`t be destructured with storeToRefs
+
 </script>
 
 <template>
@@ -13,9 +26,10 @@ const count = ref(0)
 
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
+    <button type="button" @click="changeName('Mousito Maggio')">name is {{ myDog }}</button>
     <p>
-      Edit
-      <code>components/HelloWorld.vue</code> to test HMR
+      hola
+      {{ myDog }}
     </p>
   </div>
 
